@@ -20,5 +20,10 @@ namespace AspnetCoreProject.Controllers
         {
             return View("Index");
         }
+
+        public IActionResult PartialDemo()
+        {
+            return View();
+        }
     }
 }

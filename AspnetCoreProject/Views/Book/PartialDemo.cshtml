@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Partial View Demo";
+}
+<h1>@ViewData["title"]</h1>
+<partial name="_MenuButton" />
+<div class="tab-content" id="mytabcontent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"><partial name="_PartialViewHome"></partial></div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"><partial name="_PartialViewProfile"></partial></div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab"><partial name="_PartialViewContact"></partial></div>
+</div>
+
+<p>Welcome to book stores</p>
+
