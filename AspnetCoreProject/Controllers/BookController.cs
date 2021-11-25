@@ -39,5 +39,15 @@ namespace AspnetCoreProject.Controllers
             return View(o);
 
         }
+        public IActionResult ViewComponentDemo()
+        {
+            return View();
+        }
+
+        public IActionResult LayoutDemo()
+        {
+
+            return View();
+        }
     }
 }
