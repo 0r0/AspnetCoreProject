@@ -87,7 +87,26 @@ namespace AspnetCoreProject.Controllers
             ViewBag.Result = string.Format("Input a={0}, b={1}. Result is {2}", a, b, result);
             return View();
         }
-        
 
+
+        public IActionResult ErrorHandling()
+        {
+            return View();
+        }
+
+        public IActionResult ErrorHandling(string val)
+        {
+            try
+            {
+                int total = Convert.ToInt32(val) * 10;
+                ViewBag.Result = total.ToString();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return View();
+        }
     }
 }
