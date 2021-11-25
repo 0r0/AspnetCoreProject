@@ -26,6 +26,9 @@ namespace AspnetCoreProject.Controllers
             return View();
         }
 
+
+        
+
         public IActionResult ShowDetail()
         {
             Book o = new Book();
@@ -47,6 +50,12 @@ namespace AspnetCoreProject.Controllers
         public IActionResult LayoutDemo()
         {
 
+            return View();
+        }
+
+
+        public IActionResult RoutingDemo()
+        {
             return View();
         }
     }
