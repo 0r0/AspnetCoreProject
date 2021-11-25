@@ -14,7 +14,7 @@ namespace AspnetCoreProject.ViewComponents
             {
                 result = a + b;
             }
-            else if (op == "subtract")
+            else if (op == "substract")
             {
                 result = a - b;
             }
