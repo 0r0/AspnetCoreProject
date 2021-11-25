@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using AspnetCoreProject.Services;
 namespace AspnetCoreProject
 {
     public class Startup
@@ -24,6 +24,8 @@ namespace AspnetCoreProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<IMyService, MyService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
