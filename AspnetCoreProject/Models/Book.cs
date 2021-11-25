@@ -11,7 +11,7 @@ namespace AspnetCoreProject.Models
         public string Title { get; set; }
         public string Author { get; set; }
         public string Email { get; set; }
-        public string BookCateory { get; set; }
+        public string BookCategory { get; set; }
         public string Description { get; set; }
     }
 }
