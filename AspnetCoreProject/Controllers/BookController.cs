@@ -93,7 +93,7 @@ namespace AspnetCoreProject.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public IActionResult ErrorHandling(string val)
         {
             try
@@ -102,8 +102,9 @@ namespace AspnetCoreProject.Controllers
                 ViewBag.Result = total.ToString();
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                ViewBag.Result = e;
                 throw;
             }
             return View();
