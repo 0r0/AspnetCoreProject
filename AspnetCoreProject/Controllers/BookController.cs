@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using AspnetCoreProject.Models;
+using AspnetCoreProject.Services;
+using System;
+
 namespace AspnetCoreProject.Controllers
 {
     public class BookController : Controller
     {
+        private IMyService _service;
+
+        public BookController(IMyService service)
+        {
+            this._service = service;
+        }
         public IActionResult Index()
         {
             return View();
@@ -74,5 +80,14 @@ namespace AspnetCoreProject.Controllers
         {
             return View();
         }
+
+        public IActionResult DIDemo([FromQuery]int a,[FromQuery]int b)
+        {
+            int result = this._service.Calculate(a, b);
+            ViewBag.Result = string.Format("Input a={0}, b={1}. Result is {2}", a, b, result);
+            return View();
+        }
+        
+
     }
 }
