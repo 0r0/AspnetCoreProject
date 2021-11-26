@@ -34,25 +34,27 @@ namespace AspnetCoreProject.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromForm]Product obj,List<IFormFile> files)
+        public async Task<IActionResult> CreateProduct([FromForm] Product obj, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
-                if(files.Count>0)
+                if (files.Count > 0)
                 {
                     var formFile = files[0];
                     var filePath = this._environment.WebRootPath + "/img/" + formFile.FileName;
-                    using(var stream=new FileStream(filePath, FileMode.Create))
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        formFile.CopyToAsync(stream);
+                        await formFile.CopyToAsync(stream);
                     }
                     ViewBag.ImageUrl = "/img/" + formFile.FileName;
                 }
-                return View("ImageDetail",obj);
+
+                return View("ImageDetail", obj);
             }
             return View();
-            
-
         }
     }
+   
+    
+    
 }
