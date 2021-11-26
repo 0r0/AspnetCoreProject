@@ -29,6 +29,10 @@ namespace AspnetCoreProject.Controllers
                 return View("Details", model);
             return View();
         }
+        public IActionResult CreateProduct()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm]Product obj,List<IFormFile> files)
         {
@@ -42,7 +46,7 @@ namespace AspnetCoreProject.Controllers
                     {
                         formFile.CopyToAsync(stream);
                     }
-                    ViewBag.ImageUrl = "/img" + formFile.FileName;
+                    ViewBag.ImageUrl = "/img/" + formFile.FileName;
                 }
                 return View("ImageDetail",obj);
             }
