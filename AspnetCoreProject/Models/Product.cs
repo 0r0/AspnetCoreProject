@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
+using AspnetCoreProject.Validators;
 namespace AspnetCoreProject.Models
 {
     public class Product
@@ -19,6 +19,7 @@ namespace AspnetCoreProject.Models
         public float Price { get; set; }
         [Display(Name="Product Quantity")]
         [Required]
+        [StockValidationAttribute]
         public int Quantity { get; set; }
 
 
