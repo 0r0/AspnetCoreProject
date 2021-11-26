@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewData["Title"] = "ViewReport";
+}
+
+<h1>Reporting</h1>
+<div id="container" style="width: 75%;">
+    <canvas id="canvas"></canvas>
+    <canvas id="canvas2"></canvas>
+</div>
+<script>
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var barChartData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
+			datasets:[
+				{
+					label: 'Dataset 1',
+					backgroundColor: 'rgba(255, 99, 132, 0.2)',
+					borderColor: 'rgba(255,99,132,1)',
+					borderWidth: 1,
+					data:  @Html.Raw(Json.Serialize(@ViewBag.Data1)) ,
+				},
+				{
+				label: 'Dataset 2',
+                backgroundColor: 'rgba(40, 255, 132, 0.2)',
+                borderColor: 'rgba(40, 255, 132, 1)',
+				borderWidth: 1,
+				data: @Html.Raw(Json.Serialize(@ViewBag.Data2)) ,
+				}
+			]
+
+		};
+
+        var config = {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
+                datasets: [{
+                    label: 'My First dataset',
+                    backgroundColor: 'rgba(40, 255, 132, 0.2)',
+                    borderColor: 'rgba(40, 255, 132, 1)',
+                    data: @Html.Raw(Json.Serialize(@ViewBag.Data1)) ,
+                    fill: false,
+                }, {
+                    label: 'My Second dataset',
+                    fill: false,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    data: @Html.Raw(Json.Serialize(@ViewBag.Data2)) ,
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Chart.js Line Chart'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Chart.js Bar Chart'
+					}
+				}
+			});
+
+            var ctx2 = document.getElementById('canvas2').getContext('2d');
+            window.myLine = new Chart(ctx2, config);
+
+		};
+
+
+
+</script>
