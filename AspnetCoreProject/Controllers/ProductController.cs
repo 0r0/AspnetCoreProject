@@ -18,8 +18,10 @@ namespace AspnetCoreProject.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create([FromForm]Product Model)
+        public IActionResult Create([FromForm]Product model)
         {
+            if (ModelState.IsValid)
+                return View("Details", model);
             return View();
         }
     }
