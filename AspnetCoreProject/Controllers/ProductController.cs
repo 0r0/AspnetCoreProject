@@ -68,7 +68,7 @@ namespace AspnetCoreProject.Controllers
                 Product o = new Product
                 {
                     Id = i + 1,
-                    Name = string.Format("name {}" + (i + 1)),
+                    Name = string.Format("name {0}" , (i + 1)),
                     Price = (float)(1.5 + 2.5 * i),
                     Quantity=(10+i*3)
 
@@ -76,6 +76,12 @@ namespace AspnetCoreProject.Controllers
                 list.Add(o);
             }
             return View(list);
+        }
+        public IActionResult ViewReport()
+        {
+            ViewBag.Data1 = new int[] { 10, 80, 90, 40, 33, 70, 20,50,60,80 };
+            ViewBag.Data2 = new int[] { 50, 30, 50, 70, 80, 40, 55, 80, 32 ,23};
+            return View();
         }
         
     }
