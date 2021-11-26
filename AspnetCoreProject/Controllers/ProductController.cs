@@ -9,7 +9,7 @@ using AspnetCoreProject.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-namespace Section3.Controllers
+namespace AspnetCoreProject.Controllers
 {
     public class ProductController : Controller
     {
@@ -62,8 +62,20 @@ namespace Section3.Controllers
         }
         public IActionResult ShowProducts()
         {
-      
-            return View();
+            List<Product> list = new List<Product>();
+            for(int i = 0; i < 10; i++)
+            {
+                Product o = new Product
+                {
+                    Id = i + 1,
+                    Name = string.Format("name {}" + (i + 1)),
+                    Price = (float)(1.5 + 2.5 * i),
+                    Quantity=(10+i*3)
+
+                };
+                list.Add(o);
+            }
+            return View(list);
         }
         
     }
