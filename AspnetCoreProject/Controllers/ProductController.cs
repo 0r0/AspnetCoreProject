@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using AspnetCoreProject.Models;
 namespace AspnetCoreProject.Controllers
 {
     public class ProductController : Controller
@@ -14,6 +14,11 @@ namespace AspnetCoreProject.Controllers
         }
 
         public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Product Model)
         {
             return View();
         }
