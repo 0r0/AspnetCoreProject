@@ -18,7 +18,7 @@ namespace AspnetCoreProject.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Product Model)
+        public IActionResult Create([FromForm]Product Model)
         {
             return View();
         }
