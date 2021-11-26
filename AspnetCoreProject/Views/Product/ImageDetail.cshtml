@@ -33,12 +33,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Quantity)
-            @string.IsNullOrEmpty(ViewBag.ImageUrl)
-       
-        </dd>
-        <dd class="col-sm-10">
-            file name:@ViewBag.FileName
-            file path:@ViewBag.FilePath
         </dd>
         @if (!string.IsNullOrEmpty(ViewBag.ImageUrl))
         {
