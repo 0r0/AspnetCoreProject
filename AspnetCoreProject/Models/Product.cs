@@ -8,7 +8,7 @@ namespace AspnetCoreProject.Models
 {
     public class Product
     {
-        [Display(Name="Product Id")
+        [Display(Name="Product Id")]
         [Required]
         public int Id { get; set; }
         [Display(Name="Product Name")]
