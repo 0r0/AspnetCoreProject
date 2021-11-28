@@ -67,3 +67,4 @@ namespace AspnetCoreProject
         }
     }
 }
+//Scaffold - DbContext - Provider Microsoft.EntityFrameworkCore.SqlServer - OutputDir Models - Connection "Data Source=DESKTOP-ADPA0TV;Initial Catalog=EmployeeProject;Integrated Security=True"
