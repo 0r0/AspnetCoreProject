@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspnetCoreProject.Services;
+using AspnetCoreProject.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace AspnetCoreProject
 {
     public class Startup
@@ -25,6 +28,8 @@ namespace AspnetCoreProject
         {
             services.AddControllersWithViews();
             services.AddSingleton<IMyService, MyService>();
+            services.AddDbContext<EmployeeProjectContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject"))); 
 
         }
 
