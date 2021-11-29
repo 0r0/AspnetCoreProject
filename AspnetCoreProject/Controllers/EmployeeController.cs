@@ -18,6 +18,11 @@ namespace AspnetCoreProject.Controllers
         {
             return View(_context.Employees);
         }
-      
+
+        public IActionResult Create()
+        {
+            return View(new Employee());
+        }
+
     }
 }
