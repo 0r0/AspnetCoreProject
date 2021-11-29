@@ -21,7 +21,8 @@ namespace AspnetCoreProject.Controllers
 
         public IActionResult Create()
         {
-            return View(new Employee());
+            return View();
+           // new Employee()
         }
         [HttpPost]
         public IActionResult Create([FromForm] Employee model)
@@ -38,6 +39,13 @@ namespace AspnetCoreProject.Controllers
             return RedirectToAction("Index");
 
         }
+        public IActionResult Details(int id)
+        {
+            var employee = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+            return View(employee);
+        }
+
+       
 
     }
 }
