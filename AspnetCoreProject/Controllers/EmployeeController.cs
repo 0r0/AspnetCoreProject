@@ -23,6 +23,21 @@ namespace AspnetCoreProject.Controllers
         {
             return View(new Employee());
         }
+        [HttpPost]
+        public IActionResult Create([FromForm] Employee model)
+        {
+            //if (ModelState.IsValid)
+            //{
+            //    //return View();
+            //    return RedirectToAction("Home");
+            //}
+            model.Created = DateTime.Now;
+            _context.Employees.Add(model);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+
+        }
 
     }
 }
