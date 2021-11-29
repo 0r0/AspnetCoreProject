@@ -45,7 +45,24 @@ namespace AspnetCoreProject.Controllers
             return View(employee);
         }
 
-       
 
+        public IActionResult Edit(int id)
+        {
+            var employee = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+
+            return View(employee);
+        }
+        [HttpPost]
+        public IActionResult Edit([FromForm] Employee model)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Employees.Update(model);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
     }
 }
