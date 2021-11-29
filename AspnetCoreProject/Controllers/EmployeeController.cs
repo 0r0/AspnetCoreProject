@@ -86,6 +86,20 @@ namespace AspnetCoreProject.Controllers
 
             return View();
         }
-  
+        public IActionResult EditPicture(int id)
+        {
+            ViewBag.ImageUrl = null;
+            var empPict = _context.EmployeePictures.Where(o => o.EmpId == id).FirstOrDefault();
+            if (empPict == null)
+                empPict = new EmployeePicture { EmpId = id };
+            else
+            {
+                string imgString = Convert.ToBase64String(empPict.ImageData);
+                string imageDataUrl = string.Format("data:{0};base64,{1}", empPict.ImageType, imgString);
+                ViewBag.ImageUrl = imageDataUrl;
+            }
+            return View(empPict);
+        }
+
     }
 }
