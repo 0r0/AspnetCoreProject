@@ -64,5 +64,28 @@ namespace AspnetCoreProject.Controllers
 
             return View(model);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var employee=_context.Employees.Where(o => o.Id == id).FirstOrDefault();
+            
+            return View(employee);
+        }
+        [HttpPost]
+        public IActionResult Delete(int id,string btn)
+        {
+            var employee = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+
+            if (btn == "Delete")
+            {
+                _context.Employees.Remove(employee);
+                _context.SaveChanges();
+                TempData["DeleteMessage"] = "Item is deleted successfuly";
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+  
     }
 }
