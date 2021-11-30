@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AspnetCoreProject.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+
 namespace AspnetCoreProject.Controllers
 {
     public class EmployeeController : Controller
@@ -99,6 +102,42 @@ namespace AspnetCoreProject.Controllers
                 ViewBag.ImageUrl = imageDataUrl;
             }
             return View(empPict);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPicture([FromForm]EmployeePicture model,List<IFormFile> files) 
+        {
+            if (ModelState.IsValid)
+            {
+                if (files.Count > 0)
+                {
+                    var FormFile = files[0];
+                    MemoryStream ms = new MemoryStream();
+                    await FormFile.CopyToAsync(ms);
+                    model.ImageData = ms.ToArray();
+                    model.ImageType = FormFile.ContentType;
+                }
+                model.Created = DateTime.Now;
+
+                var emPict = _context.EmployeePictures.Where(o => o.EmpId == model.EmpId).FirstOrDefault();
+                if (emPict == null)
+                {
+                    _context.EmployeePictures.Add(model);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _context.EmployeePictures.Update(model);
+                    _context.SaveChanges();
+
+                }
+
+                return RedirectToAction("ImageDetail", new { id = model.EmpId });
+
+            }
+
+
+            return View(model);
         }
 
     }
