@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AspnetCoreProject.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspnetCoreProject.Controllers
 {
@@ -77,17 +79,44 @@ namespace AspnetCoreProject.Controllers
         [HttpPost]
         public IActionResult Delete(int id,string btn)
         {
-            var employee = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+            //var employee = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
 
+            //if (btn == "Delete")
+            //{
+            //    _context.Employees.Remove(employee);
+            //    _context.SaveChanges();
+            //    TempData["DeleteMessage"] = "Item is deleted successfuly";
+            //    return RedirectToAction("Index");
+            //}
+
+            //return View();
             if (btn == "Delete")
             {
-                _context.Employees.Remove(employee);
-                _context.SaveChanges();
-                TempData["DeleteMessage"] = "Item is deleted successfuly";
-                return RedirectToAction("Index");
-            }
+                using var transanction = _context.Database.BeginTransaction();
+                try
+                {
+                    var empPict = _context.EmployeePictures.Where(o => o.EmpId == id).FirstOrDefault();
+                    if(empPict!=null)
+                    {
+                        _context.EmployeePictures.Remove(empPict);
+                        _context.SaveChanges();
+                        
+                    }
+                    var emp = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+                    _context.Employees.Remove(emp);
+                    _context.SaveChanges();
+                    transanction.Commit();
 
-            return View();
+                    TempData["DeleteMessage"] = "Item is deleted successfuly";
+                }
+                catch (Exception)
+                {
+
+                    transanction.Rollback();
+                }
+            }
+            return RedirectToAction("Index");
+            
         }
         public IActionResult EditPicture(int id)
         {
@@ -118,15 +147,18 @@ namespace AspnetCoreProject.Controllers
                     model.ImageType = FormFile.ContentType;
                 }
                 model.Created = DateTime.Now;
-
+                
                 var emPict = _context.EmployeePictures.Where(o => o.EmpId == model.EmpId).FirstOrDefault();
                 if (emPict == null)
                 {
+                 
                     _context.EmployeePictures.Add(model);
                     _context.SaveChanges();
+                   
                 }
                 else
                 {
+                    _context.Entry(emPict).State = EntityState.Detached;
                     _context.EmployeePictures.Update(model);
                     _context.SaveChanges();
 
@@ -138,6 +170,24 @@ namespace AspnetCoreProject.Controllers
 
 
             return View(model);
+        }
+
+
+        public IActionResult ImageDetail(int id)
+        {
+            ViewBag.ImageUrl = null;
+            var empPict = this._context.EmployeePictures.Where(a => a.EmpId == id).FirstOrDefault();
+            if (empPict != null)
+            {
+                string imgString = Convert.ToBase64String(empPict.ImageData);
+                string imageDataURL = string.Format("data:{0};base64,{1}", empPict.ImageType, imgString);
+
+                ViewBag.ImageUrl = imageDataURL;
+            }
+
+            var emp = this._context.Employees.Where(a => a.Id == id).FirstOrDefault();
+
+            return View(emp);
         }
 
     }
