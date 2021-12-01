@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using AspnetCoreProject.Seeder;
 
 namespace AspnetCoreProject.Controllers
 {
@@ -204,6 +205,13 @@ namespace AspnetCoreProject.Controllers
             vw.PageCount =(int)Math.Ceiling(PageCount);
             return vw;
 
+        }
+
+        public IActionResult Seed()
+        {
+            var SeedEmployee = new EmployeeSeeder(_context);
+            SeedEmployee.Seed(100);
+            return RedirectToAction("Index");
         }
         
 
