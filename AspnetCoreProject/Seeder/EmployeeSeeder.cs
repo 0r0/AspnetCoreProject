@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspnetCoreProject._ُSeeder
+namespace AspnetCoreProject.Seeder
 {
     public class EmployeeSeeder
     {
-        private EmployeeProjectContext ContextForSeeding;
+        private  EmployeeProjectContext ContextForSeeding;
         public EmployeeSeeder(EmployeeProjectContext employeeProjectContext)
         {
             ContextForSeeding = employeeProjectContext;
         }
-        public void Seed(int NumberOfSeed)
+        public  void Seed(int NumberOfSeed)
         {
             for(int i=0;i<NumberOfSeed;i++)
             {
