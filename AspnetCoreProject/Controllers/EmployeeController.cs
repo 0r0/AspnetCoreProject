@@ -190,5 +190,23 @@ namespace AspnetCoreProject.Controllers
             return View(emp);
         }
 
+
+
+        private EmployeeView GetEmployee(int CurrentPage)
+        {
+            int nRows = 10;
+            EmployeeView vw = new EmployeeView();
+            vw.Employees = (from emp in _context.Employees select emp)
+                .Skip((CurrentPage - 1) * 10)
+                .Take(nRows).ToList();
+            vw.CurrentPageIndex = CurrentPage;
+            double PageCount = (double)((decimal)_context.Employees.Count() / Convert.ToDecimal(nRows));
+            vw.PageCount =(int)Math.Ceiling(PageCount);
+            return vw;
+
+        }
+        
+
+
     }
 }
