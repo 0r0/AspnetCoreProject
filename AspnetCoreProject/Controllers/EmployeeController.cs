@@ -193,7 +193,7 @@ namespace AspnetCoreProject.Controllers
 
         public IActionResult Paging(int currentPageIndex)
         {
-            if (currentPageIndex < 0)
+            if (currentPageIndex <= 0)
                 currentPageIndex = 1;
             return View(GetEmployee(currentPageIndex));
         }
@@ -203,7 +203,7 @@ namespace AspnetCoreProject.Controllers
             int nRows = 10;
             EmployeeView vw = new EmployeeView();
             vw.Employees = (from emp in _context.Employees select emp)
-                .Skip((CurrentPage - 1) * 10)
+                .Skip((CurrentPage - 1) * nRows)
                 .Take(nRows).ToList();
             vw.CurrentPageIndex = CurrentPage;
             double PageCount = (double)((decimal)_context.Employees.Count() / Convert.ToDecimal(nRows));
@@ -218,6 +218,8 @@ namespace AspnetCoreProject.Controllers
             SeedEmployee.Seed(100);
             return RedirectToAction("Index");
         }
+
+     
         
 
 
