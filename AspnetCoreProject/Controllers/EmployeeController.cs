@@ -218,8 +218,47 @@ namespace AspnetCoreProject.Controllers
             SeedEmployee.Seed(100);
             return RedirectToAction("Index");
         }
+        public IActionResult SortingPaging(EmployeeSortPagingView model)
+        {
+            if (model == null)
+            {
+                model = new EmployeeSortPagingView();
+                model.CurrentIndexPage = 1;
+                model.SortField = "Id";
+                model.SortOrder = "ASC";
+                model.CurrentSortField = "Id";
+                model.CurrentSortOrder = "ASC";
+            }
+            else
+            {
+                if (model.CurrentIndexPage <= 0)
+                    model.CurrentIndexPage = 1;
+                if (string.IsNullOrEmpty(model.SortField))
+                    model.SortField = "Id";
+                if(model.SortField==model.CurrentSortField)
+                {
+                    if (model.CurrentSortOrder == model.SortOrder)
+                        if (model.SortOrder == "ASC")
+                            model.SortOrder = "DESC";
+                        else
+                            model.SortOrder = "ASC";
 
-        private EmployeeSortPagingView EmployeeSortPagingView(int currentPage, string field, string order)
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(model.SortOrder))
+                        model.SortOrder = "ASC";
+                }
+                
+               
+              
+            }
+            ViewBag.CurrentSortOrder = model.CurrentSortOrder;
+            ViewBag.CurrentSortField = model.CurrentSortField;
+            ViewBag.CurrentPageIndex = model.CurrentIndexPage;
+            return View(GetEmployeesSortingPaging(model.CurrentIndexPage,model.CurrentSortField,model.CurrentSortOrder));
+        }
+        private EmployeeSortPagingView GetEmployeesSortingPaging(int currentPage, string field, string order)
         {
             int nRows = 10;
             EmployeeSortPagingView vw = new EmployeeSortPagingView();
