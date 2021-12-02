@@ -191,7 +191,12 @@ namespace AspnetCoreProject.Controllers
             return View(emp);
         }
 
-
+        public IActionResult Paging(int currentPageIndex)
+        {
+            if (currentPageIndex < 0)
+                currentPageIndex = 1;
+            return View(GetEmployee(currentPageIndex));
+        }
 
         private EmployeeView GetEmployee(int CurrentPage)
         {
