@@ -219,8 +219,35 @@ namespace AspnetCoreProject.Controllers
             return RedirectToAction("Index");
         }
 
-     
-        
+        private EmployeeSortPagingView EmployeeSortPagingView(int currentPage, string field, string order)
+        {
+            int nRows = 10;
+            EmployeeSortPagingView vw = new EmployeeSortPagingView();
+            var propertyInfo = typeof(Employee).GetProperty(field);
+            if (order == "ASC")
+            {
+                vw.Employees = (from emp in _context.Employees
+                                select emp).ToList().OrderBy(emp => propertyInfo.GetValue(emp, null)).
+                                Skip((currentPage - 1) * nRows).
+                                Take(nRows).ToList();
+            }
+            else
+            {
+                vw.Employees = (from emp in _context.Employees
+                                select emp).ToList().OrderByDescending(o => propertyInfo.GetValue(o, null)).
+                              Skip((currentPage - 1) * nRows).Take(nRows).ToList();
+            }
+            double pageCount = (double)(decimal)(_context.Employees.Count() / Convert.ToDecimal(nRows));
+            vw.PageCount = (int)Math.Ceiling(pageCount);
+            vw.CurrentIndexPage = currentPage;
+            vw.SortField = field;
+            vw.SortOrder = order;
+
+            return vw;
+
+
+        }
+
 
 
     }
