@@ -11,6 +11,7 @@ namespace AspnetCoreProject.Models
         public int CurrentIndexPage { get; set; }
         public int PageCount { get; set; }
         public string SortField { get; set; }
+        public string SortOrder { get; set; }
         public string CurrentSortField { get; set; }
         public string CurrentSortOrder { get; set; }
     }
