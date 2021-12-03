@@ -29,7 +29,29 @@ namespace AspnetCoreProject
             services.AddControllersWithViews();
             services.AddSingleton<IMyService, MyService>();
             services.AddDbContext<EmployeeProjectContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject"))); 
+                (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject")));
+            services.AddSession();
+            string distributed = Configuration["Distributed"];
+            //switch(distributed)
+            //{
+            //    case "MEMORY":
+            //        services.AddDistributedMemoryCache();
+            //        services.AddSession(options => {
+            //            options.IdleTimeout = TimeSpan.FromSeconds(10);
+            //            options.Cookie.HttpOnly = true;
+            //            options.Cookie.IsEssential = true;
+            //            });
+            //        break;
+            //    case "SQLSERVER":
+            //        services.AddDistributedSqlServerCache(options =>
+            //        {
+            //            options.ConnectinString = Configuration.GetConnectionString();
+            //            options.SchemaName = "dbo";
+            //            options.TableName = "ProjectCache";
+
+
+            //        });
+            //}
 
         }
 
@@ -59,7 +81,7 @@ namespace AspnetCoreProject
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
