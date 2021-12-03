@@ -256,7 +256,7 @@ namespace AspnetCoreProject.Controllers
             ViewBag.CurrentSortOrder = model.CurrentSortOrder;
             ViewBag.CurrentSortField = model.CurrentSortField;
             ViewBag.CurrentPageIndex = model.CurrentIndexPage;
-            return View(GetEmployeesSortingPaging(model.CurrentIndexPage,model.CurrentSortField,model.CurrentSortOrder));
+            return View(GetEmployeesSortingPaging(model.CurrentIndexPage,model.SortField,model.SortOrder));
         }
         private EmployeeSortPagingView GetEmployeesSortingPaging(int currentPage, string field, string order)
         {
