@@ -40,7 +40,19 @@ namespace AspnetCoreProject.Controllers
             ViewBag.ta = TempData["a"];
             ViewBag.tb = TempData["b"];
             ViewBag.tab = TempData["ab"];
-            ViewBag.c = TempData["c"];
+            ViewBag.tc = TempData["c"];
+            return View();
+        }
+        public IActionResult ShowSessionView2()
+        {
+            ViewBag.a = HttpContext.Session.GetInt32("a");
+            ViewBag.b = HttpContext.Session.GetInt32("b");
+            ViewBag.ab = HttpContext.Session.GetInt32("ab");
+            ViewBag.c = HttpContext.Session.GetString("c");
+            ViewBag.ta = TempData["a"];
+            ViewBag.tb = TempData["b"];
+            ViewBag.tab = TempData["ab"];
+            ViewBag.tc = TempData["c"];
             return View();
         }
 
