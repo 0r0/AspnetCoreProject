@@ -17,6 +17,21 @@ namespace AspnetCoreProject.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult SessionView(int a, int b, string c)
+        {
+            HttpContext.Session.SetInt32("a", a);
+            HttpContext.Session.SetInt32("b", b);
+            HttpContext.Session.SetInt32("ab", a + b);
+            HttpContext.Session.SetString("c", c);
+            TempData["a"] = a;
+            TempData["b"] = b;
+            TempData["ab"] = a + b;
+            TempData["c"] = c;
+
+            return View();
+        }
         
+
     }
 }
