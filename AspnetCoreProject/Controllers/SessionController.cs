@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,8 +41,12 @@ namespace AspnetCoreProject.Controllers
             {
                 var allEmp = _context.Employees;
                 _cache.SetCache<IEnumerable<Employee>>("employees",allEmp.ToList());
-                return View(allEmp);
+                var employeess = _cache.GetCache<IEnumerable<Employee>>("employees");
+                //return View(allEmp);
+
+                return View(employeess);
             }
+
         }
         public IActionResult CreateCacheDemo()
         {
@@ -62,6 +67,23 @@ namespace AspnetCoreProject.Controllers
                 return View();
             }
 
+        }
+        public IActionResult DetailCacheDemo(int id)
+        {
+            var employee = _cache.GetCache<Employee>(id.ToString());
+            if (employee != null)
+            {
+                return View(employee);
+            }
+            else
+            {
+                var emp = _context.Employees.Where(o => o.Id == id).FirstOrDefault();
+                if (emp != null)
+                {
+                    _cache.SetCache<Employee>(id.ToString(), emp);
+                }
+                return View(emp);
+            }
         }
 
         public IActionResult SessionView()
@@ -105,6 +127,11 @@ namespace AspnetCoreProject.Controllers
             ViewBag.tab = TempData["ab"];
             ViewBag.tc = TempData["c"];
             return View();
+        }
+        [ResponseCache(Duration =0,Location =ResponseCacheLocation.None,NoStore =true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId=Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
 
     }
