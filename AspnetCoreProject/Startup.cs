@@ -32,26 +32,36 @@ namespace AspnetCoreProject
                 (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject")));
             services.AddSession();
             string distributed = Configuration["Distributed"];
-            //switch(distributed)
-            //{
-            //    case "MEMORY":
-            //        services.AddDistributedMemoryCache();
-            //        services.AddSession(options => {
-            //            options.IdleTimeout = TimeSpan.FromSeconds(10);
-            //            options.Cookie.HttpOnly = true;
-            //            options.Cookie.IsEssential = true;
-            //            });
-            //        break;
-            //    case "SQLSERVER":
-            //        services.AddDistributedSqlServerCache(options =>
-            //        {
-            //            options.ConnectinString = Configuration.GetConnectionString();
-            //            options.SchemaName = "dbo";
-            //            options.TableName = "ProjectCache";
-
-
-            //        });
-            //}
+            switch (distributed)
+            {
+                case "MEMORY":
+                    services.AddDistributedMemoryCache();
+                    services.AddSession(options =>
+                    {
+                        options.IdleTimeout = TimeSpan.FromSeconds(10);
+                        options.Cookie.HttpOnly = true;
+                        options.Cookie.IsEssential = true;
+                    });
+                    break;
+                case "SQLSERVER":
+                    services.AddDistributedSqlServerCache(options=>{
+                        options.ConnectionString = Configuration.GetConnectionString("EmployeeProject");
+                        options.SchemaName = "dbo";
+                        options.TableName = "ProjectCache";
+                    });
+                    break;
+                case "REDIS":
+                    services.AddStackExchangeRedisCache(options=>
+                    {
+                        options.Configuration = "localhost:6379";
+                        options.InstanceName = "ProjectRedis";
+                    });
+                    break;
+                default:
+                    services.AddDistributedMemoryCache();
+                    break;
+            }
+            //services.AddScoped<IDistributedCacheService, DistributedCacheService>();
 
         }
 
