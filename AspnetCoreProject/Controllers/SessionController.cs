@@ -43,6 +43,10 @@ namespace AspnetCoreProject.Controllers
                 return View(allEmp);
             }
         }
+        public IActionResult CreateCacheDemo()
+        {
+            return View(new Employee());
+        }
 
         public IActionResult SessionView()
         {
