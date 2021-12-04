@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AspnetCoreProject.Models;
+using AspnetCoreProject.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +12,18 @@ namespace AspnetCoreProject.Controllers
 {
     public class SessionController : Controller
     {
+        private readonly ILogger<SessionController> _logger;
+        private readonly EmployeeProjectContext _context;
+        private readonly IDistributedCacheService _cache;
+
+        public SessionController(ILogger<SessionController> logger,EmployeeProjectContext context,
+            IDistributedCacheService cache)
+        {
+            _logger = logger;
+            _context = context;
+            _cache = cache;
+        }
+
         public IActionResult Index()
         {
             return View();
