@@ -47,6 +47,22 @@ namespace AspnetCoreProject.Controllers
         {
             return View(new Employee());
         }
+        [HttpPost]
+        public IActionResult CreateCacheDemo([FromForm] Employee model)
+        {
+            model.Created = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                _context.Employees.Add(model);
+                _context.SaveChanges();
+                return RedirectToAction("CacheDemo");
+            }
+            else
+            {
+                return View();
+            }
+
+        }
 
         public IActionResult SessionView()
         {
