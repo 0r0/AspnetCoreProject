@@ -28,6 +28,22 @@ namespace AspnetCoreProject.Controllers
         {
             return View();
         }
+
+        public IActionResult CacheDemo()
+        {
+            var employees = _cache.GetCache<IEnumerable<Employee>>("employees");
+            if (employees != null)
+            {
+                return View(employees);
+            }
+            else
+            {
+                var allEmp = _context.Employees;
+                _cache.SetCache<IEnumerable<Employee>>("employees",allEmp.ToList());
+                return View(allEmp);
+            }
+        }
+
         public IActionResult SessionView()
         {
             return View();
