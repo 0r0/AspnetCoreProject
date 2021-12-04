@@ -50,18 +50,23 @@ namespace AspnetCoreProject
                         options.TableName = "ProjectCache";
                     });
                     break;
+                    // docker run --name ProjectCacheRedis -p 6379:6379 -d redis
+                    //docker exec -it ProjectCacheRedis sh
+                    // redis-cli
+                    //ping
+                    //
                 case "REDIS":
                     services.AddStackExchangeRedisCache(options=>
                     {
                         options.Configuration = "localhost:6379";
-                        options.InstanceName = "ProjectRedis";
+                        options.InstanceName = "ProjectCacheRedis";
                     });
                     break;
                 default:
                     services.AddDistributedMemoryCache();
                     break;
             }
-            //services.AddScoped<IDistributedCacheService, DistributedCacheService>();
+            services.AddScoped<IDistributedCacheService, DistributedCacheService>();
 
         }
 
