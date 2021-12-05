@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using AspnetCoreProject.Services;
 using AspnetCoreProject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspnetCoreProject
 {
@@ -30,6 +31,43 @@ namespace AspnetCoreProject
             services.AddSingleton<IMyService, MyService>();
             services.AddDbContext<EmployeeProjectContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject")));
+            //Identity database
+            //Add-Migration CreateIdentitySchema -context AppIdentityDbContext 
+            //or
+            // dotnet ef migrations add CreateIdentitySchema -c AppIdentityDbContext
+            //dotnet ef database update -c AppIdentityDbContext
+            services.AddDbContext<AppIdentityDbContext>
+                (options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeProject")));
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                //Password Settings
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                //Lockout Settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                //User Settings
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+
+                //for email confirmation
+                options.SignIn.RequireConfirmedEmail = false;
+
+
+            }).AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options => {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
             services.AddSession();
             string distributed = Configuration["Distributed"];
             switch (distributed)
@@ -97,6 +135,7 @@ namespace AspnetCoreProject
 
             app.UseRouting();
             app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
