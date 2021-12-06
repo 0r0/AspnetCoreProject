@@ -14,16 +14,17 @@ namespace AspnetCoreProject.Controllers
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
-        private IMailService _mailService;
+        //private IMailService _mailService;
         public AccountController(UserManager<AppUser> userManager,
-            IMailService mailService,SignInManager<AppUser> signInManager
+           // IMailService mailService,
+            SignInManager<AppUser> signInManager
             ,RoleManager<IdentityRole> roleManager)
         
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _mailService = mailService;
+            //_mailService = mailService;
         }
         public IActionResult Index()
         {
@@ -60,5 +61,12 @@ namespace AspnetCoreProject.Controllers
             }
             return View(model);
         }
+
+        public IActionResult Login(string returnUrl)
+        {
+            ViewBag.returnUrl = returnUrl;
+            return View(new LoginView());
+        }
+
     }
 }
