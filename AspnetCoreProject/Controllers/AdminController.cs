@@ -27,6 +27,12 @@ namespace AspnetCoreProject.Controllers
 
         }
 
+        public async Task<IActionResult> Details(string id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+            return View(user);
+        }
+
 
     }
 }
