@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>My Profile</h1>
+<p>User Login: @ViewBag.User</p>
+<div>
+    <a asp-action="ChangePassword">Change Password</a>
+</div>
+<div>
+    <a asp-action="ChangeEmail">Change Email</a>
+</div>
+<div>
+    <a asp-action="MFA">Go to MFA setting</a>
+</div>
+<div>
+    <a asp-controller="Account" asp-action="Logout">Logout</a>
+</div>
