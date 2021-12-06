@@ -32,6 +32,25 @@ namespace AspnetCoreProject.Controllers
             AppUser user = await _userManager.FindByIdAsync(id);
             return View(user);
         }
+        public async Task<IActionResult> Delete(string id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            return View(user);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id,string btn)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (btn == "Delete")
+            {
+                await _userManager.DeleteAsync(user);
+                return RedirectToAction("List");
+            }
+            return View(user);
+            
+        }
 
 
     }
