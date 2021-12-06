@@ -95,5 +95,61 @@ namespace AspnetCoreProject.Controllers
             await _signInManager.SignOutAsync();
             return View();
         }
+
+        public async Task<IActionResult> GenerateRoles()
+        {
+            string[] roleNames = { "Admin", "Manager", "Member" };
+            IdentityResult roleResult;
+            foreach(var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+
+                }
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> GenerateUsers()
+        {
+            AppUser userAv1 = await _userManager.FindByNameAsync("manager");
+            if(userAv1==null)
+            {
+                AppUser user1 = new AppUser
+                {
+                    UserName = "manager",
+                    FullName = "Manager",
+                    Email = "manager@email.com"
+                };
+                IdentityResult result = await _userManager.CreateAsync(user1, "Pass@word1");
+                if(result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user1, "Manager");
+
+                }
+            }
+            AppUser userAv2 = await _userManager.FindByEmailAsync("admin@email.com");
+            if (userAv2 == null)
+            {
+                //define
+                AppUser user2 = new AppUser
+                {
+                    UserName = "admin",
+                    FullName = "Admin",
+                    Email = "admin@email.com"
+                };
+                //create user
+                IdentityResult result = await _userManager.CreateAsync(user2, "Pass@word1");
+                if (result.Succeeded)
+                {
+
+                    // add admin role
+                    await _userManager.AddToRoleAsync(user2, "Admin");
+                }
+            }
+            return View();
+        }
     }
 }
