@@ -67,6 +67,29 @@ namespace AspnetCoreProject.Controllers
             ViewBag.returnUrl = returnUrl;
             return View(new LoginView());
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([FromForm] LoginView model,string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByNameAsync(model.UserName);
+                if (user != null)
+                {
+                    await _signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                    if (result.Succeeded)
+                    {
+                        return Redirect(returnUrl ?? "/account");
+                    }
+
+                }
+                ModelState.AddModelError(nameof(LoginView.UserName), "Invalid User/Password or account is not activated yet");
+
+            }
+
+            return View(model);
+        }
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
