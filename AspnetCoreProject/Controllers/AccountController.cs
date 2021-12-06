@@ -151,5 +151,10 @@ namespace AspnetCoreProject.Controllers
             }
             return View();
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
