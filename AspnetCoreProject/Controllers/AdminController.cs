@@ -21,7 +21,12 @@ namespace AspnetCoreProject.Controllers
         {
             return View();
         }
+        public IActionResult List()
+        {
+            return View(_userManager.Users);
 
-     
+        }
+
+
     }
 }
