@@ -67,6 +67,10 @@ namespace AspnetCoreProject.Controllers
             ViewBag.returnUrl = returnUrl;
             return View(new LoginView());
         }
-
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return View();
+        }
     }
 }
