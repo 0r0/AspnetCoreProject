@@ -225,6 +225,26 @@ namespace AspnetCoreProject.Controllers
             return View();
 
         }
-      
+        public async Task<IActionResult> ConfirmEmail(string code, string userid)
+        {
+            //get token from code
+            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+            //get user
+            var user = await _userManager.FindByIdAsync(userid);
+            //confirm email for registration
+            IdentityResult Result = await _userManager.ConfirmEmailAsync(user, token);
+            if (Result.Succeeded)
+            {
+                ViewBag.Status = "Email Confirmation is succeeded";
+            }
+            else
+            {
+                ViewBag.Status = "Email confirmation was failed or invalid token / userid";
+            }
+            return View();
+
+            
+           
+        }
     }
 }
