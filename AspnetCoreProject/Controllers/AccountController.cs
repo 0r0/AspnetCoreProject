@@ -14,9 +14,9 @@ namespace AspnetCoreProject.Controllers
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
-        //private IMailService _mailService;
+        private IMailService _mailService;
         public AccountController(UserManager<AppUser> userManager,
-           // IMailService mailService,
+            IMailService mailService,
             SignInManager<AppUser> signInManager
             ,RoleManager<IdentityRole> roleManager)
         
@@ -24,7 +24,7 @@ namespace AspnetCoreProject.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            //_mailService = mailService;
+            _mailService = mailService;
         }
         public IActionResult Index()
         {
@@ -155,6 +155,17 @@ namespace AspnetCoreProject.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        public async Task<IActionResult> SendEmail()
+        {
+            MailRequest req = new MailRequest();
+            req.ToEmail = "Example@Example.com";
+            req.Subject = "Test Email From ASP.Net Core 5 MVC";
+            req.Body = "this is simple content";
+            await _mailService.SendEmailAsync(req);
+            return View();
+                 
         }
     }
 }
