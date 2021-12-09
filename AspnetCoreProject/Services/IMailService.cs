@@ -8,6 +8,6 @@ namespace AspnetCoreProject.Services
 {
     public interface IMailService
     {
-        Task sendEmailAsync(MailRequest mailRequest);
+        Task SendEmailAsync(MailRequest mailRequest);
     }
 }
