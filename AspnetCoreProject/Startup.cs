@@ -12,6 +12,7 @@ using AspnetCoreProject.Services;
 using AspnetCoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using AspnetCoreProject.Settings;
 
 namespace AspnetCoreProject
 {
@@ -105,6 +106,9 @@ namespace AspnetCoreProject
                     break;
             }
             services.AddScoped<IDistributedCacheService, DistributedCacheService>();
+            //email services
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
 
         }
 
