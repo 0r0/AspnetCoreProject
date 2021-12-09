@@ -29,7 +29,7 @@ namespace AspnetCoreProject.Services
              };
             using var smtp=new SmtpClient();
             smtp.Connect(_settings.Host, _settings.Port, MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
-            smtp.Authenticate(_settings.Mail, _settings.Password);
+            smtp.Authenticate(_settings.UserName, _settings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
         }
