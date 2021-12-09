@@ -2,9 +2,11 @@
 using AspnetCoreProject.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AspnetCoreProject.Controllers
@@ -167,5 +169,62 @@ namespace AspnetCoreProject.Controllers
             return View();
                  
         }
+
+        public IActionResult Register2()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register2([FromForm]UserView model)
+        {
+            if(ModelState.IsValid)
+            {
+                AppUser user = new AppUser
+                {
+                    UserName = model.UserName,
+                    FullName = model.FullName,
+                    Email = model.Email
+                };
+                IdentityResult Result=await _userManager.CreateAsync(user, model.Password);
+                if (Result.Succeeded)
+                {
+                    //add role
+                    IdentityResult Result2 = await _userManager.AddToRoleAsync(user, "Member");
+                    if(!Result2.Succeeded)
+                    {
+                        ModelState.AddModelError(nameof(LoginView.UserName), "failed to create an user");
+                        return View(model);
+                    }
+                    //get token code
+                    var usr = await _userManager.FindByEmailAsync(model.Email);
+                    var userId = await _userManager.GetUserIdAsync(usr);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(usr);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    string link = Url.Action("ConfirmEmail","Account",new { 
+                    userid=userId,
+                    code=code
+                    },protocol:HttpContext.Request.Scheme);
+
+                    //send email
+                    MailRequest req = new MailRequest();
+                    req.ToEmail = user.Email;
+                    req.Subject = "confrimation email";
+                    req.Body = "this is a confirmation email if you wanna confirm ur registration click on link below\n" + link;
+                    await _mailService.SendEmailAsync(req);
+                    return RedirectToAction("Index");
+
+
+
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(LoginView.UserName), "failed to create an user");
+                }
+            }
+            return View();
+
+        }
+      
     }
 }
