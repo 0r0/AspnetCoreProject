@@ -309,7 +309,7 @@ namespace AspnetCoreProject.Controllers
             {
                 //validate recaptcha
                 string token = Request.Form["g-recaptcha-response"];
-                if(_recaptchaService.ValidateRecaptcha(token))
+                if(!_recaptchaService.ValidateRecaptcha(token))
                 {
                     ModelState.AddModelError(nameof(UserView.UserName), "You failed to captcha");
                     return View(model);
@@ -328,7 +328,7 @@ namespace AspnetCoreProject.Controllers
                     //add role 
                     IdentityResult Result2 = await _userManager.AddToRoleAsync(user, "Member");
                     if(Result2.Succeeded)
-                        return RedirectToAction("/Account");
+                        return RedirectToAction("Index");
                 }
 
 
