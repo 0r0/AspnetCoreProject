@@ -123,6 +123,9 @@ namespace AspnetCoreProject
             //email services
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, MailService>();
+            //recaptcha services
+            services.Configure<ReCaptchaSettings>(Configuration.GetSection("ReCaptchaSettings"));
+            services.AddTransient<IRecaptchaService, ReCaptchaService>();
 
         }
 
