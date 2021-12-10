@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /AspnetCoreProject/wwwroot/images
 /AspnetCoreProject/wwwroot/img/
+/AspnetCoreProject/Controllers/Test1Controller.cs
