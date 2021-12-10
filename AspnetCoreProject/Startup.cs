@@ -13,6 +13,7 @@ using AspnetCoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AspnetCoreProject.Settings;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AspnetCoreProject
 {
@@ -105,6 +106,19 @@ namespace AspnetCoreProject
                     services.AddDistributedMemoryCache();
                     break;
             }
+            //cookie authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options=>
+            {
+                options.Cookie.HttpOnly = false;
+                options.ExpireTimeSpan = TimeSpan.FromDays(3);
+                options.LoginPath = "/Account/LoginRememberMe";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
             services.AddScoped<IDistributedCacheService, DistributedCacheService>();
             //email services
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
