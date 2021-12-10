@@ -20,16 +20,19 @@ namespace AspnetCoreProject.Controllers
         private SignInManager<AppUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
         private IMailService _mailService;
+        private IRecaptchaService _recaptchaService;
         public AccountController(UserManager<AppUser> userManager,
             IMailService mailService,
             SignInManager<AppUser> signInManager
-            ,RoleManager<IdentityRole> roleManager)
+            ,RoleManager<IdentityRole> roleManager,
+            IRecaptchaService recaptchaService)
         
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _mailService = mailService;
+            _recaptchaService = recaptchaService;
         }
         public IActionResult Index()
         {
@@ -290,8 +293,49 @@ namespace AspnetCoreProject.Controllers
             }
             return View(model);
         }
-        
 
-      
+
+        public IActionResult RegisterCaptcha()
+        {
+            ViewData["RecaptchaKey"] = _recaptchaService.Configs.Key;
+            return View();
+        }
+        [HttpPost]
+
+        public async Task<IActionResult> RegisterCaptcha([FromForm] UserView model )
+        {
+            ViewData["ReCaptchaKey"] = _recaptchaService.Configs.Key;
+            if(ModelState.IsValid)
+            {
+                //validate recaptcha
+                string token = Request.Form["g-recaptcha-response"];
+                if(_recaptchaService.ValidateRecaptcha(token))
+                {
+                    ModelState.AddModelError(nameof(UserView.UserName), "You failed to captcha");
+                    return View(model);
+                }
+                AppUser user = new AppUser
+                {
+                    UserName = model.UserName,
+                    FullName = model.FullName,
+                    Email = model.Email,
+                    
+
+                };
+                IdentityResult Result = await _userManager.CreateAsync(user,model.Password);
+                if(Result.Succeeded)
+                {
+                    //add role 
+                    IdentityResult Result2 = await _userManager.AddToRoleAsync(user, "Member");
+                    if(Result2.Succeeded)
+                        return RedirectToAction("/Account");
+                }
+
+
+
+            }
+            return View(model);
+
+        }
     }
 }
