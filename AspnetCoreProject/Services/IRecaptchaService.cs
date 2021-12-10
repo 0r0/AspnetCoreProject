@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AspnetCoreProject.Services
 {
-    interface IRecaptchaService
+   public  interface IRecaptchaService
     {
         ReCaptchaSettings Configs { get; }
         bool ValidateRecaptcha(string token);
