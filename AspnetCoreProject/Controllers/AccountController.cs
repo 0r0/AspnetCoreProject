@@ -1,11 +1,14 @@
 ﻿using AspnetCoreProject.Models;
 using AspnetCoreProject.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -241,10 +244,54 @@ namespace AspnetCoreProject.Controllers
             {
                 ViewBag.Status = "Email confirmation was failed or invalid token / userid";
             }
-            return View();
-
-            
-           
+            return View();  
         }
+        public IActionResult LoginRememberMe(string returnUrl)
+        {
+            ViewBag.returnUrl = returnUrl;
+            return View(new LoginView());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginRememberMe([FromForm] LoginView model,bool rememberMe,string returnUrl)
+        {
+            if(ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByNameAsync(model.UserName);
+                if(user!=null)
+                {
+                    bool isValid = await _userManager.CheckPasswordAsync(user, model.Password);
+                    if(isValid)
+                    {
+                        var claims = new List<Claim>();
+                        //store user name
+                        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                        claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                        //store user roles
+                        var roles = await  _userManager.GetRolesAsync(user);
+                        foreach(string role in roles)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, role));
+                        }
+                        //create user Identity
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        var authProperties = new AuthenticationProperties();
+                        authProperties.IsPersistent = rememberMe;
+                        authProperties.ExpiresUtc = DateTimeOffset.Now.AddDays(3);
+                        //Cookie signed and store a cookie
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            principal, authProperties).Wait();
+                        return Redirect(returnUrl ?? "/account");
+                    }
+                }
+                ModelState.AddModelError(nameof(LoginView.UserName), 
+                    "Invalid user/password or account is not activated");
+            }
+            return View(model);
+        }
+        
+
+      
     }
 }
