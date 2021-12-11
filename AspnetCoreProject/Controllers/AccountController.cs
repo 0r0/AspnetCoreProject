@@ -337,5 +337,30 @@ namespace AspnetCoreProject.Controllers
             return View(model);
 
         }
+
+        public IActionResult ForgotAccount()
+        {
+            return View(new ForgotAccount());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<object> ForgotAccount([FromForm]ForgotAccount model)
+        {
+            if(!string.IsNullOrEmpty(model.Email))
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if(user!=null)
+                {
+                    MailRequest req=new MailRequest();
+                    req.Subject = "Forgot Account";
+                    req.ToEmail = user.Email;
+                    req.Body= "<p>Here is your account: " + user.UserName + "</p>";
+                    await _mailService.SendEmailAsync(req);
+                    return View("ForgotAccountConfimation");
+
+                }
+            }
+            return View(model);
+        }
     }
 }
